@@ -32,8 +32,13 @@ export const About = ({ onBack }: AboutProps) => {
 
       <AppInfo>
         <AppLogo src="/assets/icons/qwacky.png" alt="Qwacky" />
-        <AppName>Qwacky</AppName>
+        <AppName>{isSafari ? 'Qwacky for Safari' : 'Qwacky'}</AppName>
         <AppVersion>v{__APP_VERSION__}</AppVersion>
+        {isSafari && (
+          <AppVersion style={{ marginTop: 4, opacity: 0.7 }}>
+            Fork of <a href="https://github.com/Lanshuns/Qwacky" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>Lanshuns/Qwacky</a>
+          </AppVersion>
+        )}
       </AppInfo>
 
       <LinksSection>

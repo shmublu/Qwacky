@@ -13,9 +13,9 @@
 
 # Qwacky for Safari
 
-A lightweight client for **DuckDuckGo Email Protection** — generate and manage `@duck.com` aliases without installing the full DuckDuckGo extension.
+> **This is a fork.** The original [Lanshuns/Qwacky](https://github.com/Lanshuns/Qwacky) built the popup UI, alias workflow, sync, and DDG API integration. This fork (`shmublu/Qwacky`, branch `safari`) adds a **macOS Safari Web Extension** target plus a few Safari-specific reliability fixes. Chrome and Firefox users should use upstream.
 
-This is a Safari (macOS) port of [Lanshuns/Qwacky](https://github.com/Lanshuns/Qwacky). The Chrome and Firefox builds in this fork still work and remain at upstream feature parity.
+A lightweight client for **DuckDuckGo Email Protection** — generate and manage `@duck.com` aliases without installing the full DuckDuckGo extension.
 
 ## What is this?
 
