@@ -42,6 +42,6 @@
     "package:chrome": "RELEASE=true npm run build && node scripts/package.js chrome",
     "package:firefox": "RELEASE=true npm run build:firefox && node scripts/package.js firefox",
     "package": "npm run package:chrome && npm run package:firefox",
-    "safari:convert": "xcrun safari-web-extension-converter ./dist_safari --project-location ./safari --app-name Qwacky --bundle-identifier com.shmublu.qwacky --macos-only --swift --copy-resources --no-open --force"
+    "safari:convert": "xcrun safari-web-extension-converter ./dist_safari --project-location ./safari --app-name Qwacky --bundle-identifier com.shmublu.Qwacky --macos-only --swift --copy-resources --no-open --force"
   }
 }

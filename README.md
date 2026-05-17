@@ -124,15 +124,52 @@ npm run dev:firefox
 npm run build
 # For Firefox
 npm run build:firefox
+# For Safari (macOS)
+npm run build:safari
 ```
 
-The built extension will be available in `dist_chrome/` or `dist_firefox/` respectively.
+The built extension will be available in `dist_chrome/`, `dist_firefox/`, or `dist_safari/` respectively.
 
 > **Note**: For development and temporary installation in Firefox, you can use `about:debugging` method:
 > 1. Go to `about:debugging`
 > 2. Click "This Firefox" in the left sidebar
 > 3. Click "Load Temporary Add-on"
 > 4. Select the `manifest.json` file from the `dist_firefox/` folder
+
+### Safari (macOS)
+
+Safari extensions must be wrapped in a native macOS app and signed by Xcode.
+The `safari/` directory contains a generated Xcode project that does both.
+
+**Prerequisites**
+- Xcode (full app, not just Command Line Tools)
+- Run `sudo xcodebuild -runFirstLaunch` once after installing Xcode
+
+**Build and run**
+```bash
+# 1. Build the web extension assets
+npm run build:safari
+
+# 2. Regenerate the Xcode wrapper from the latest assets
+#    (only needed when manifest or resource layout changes — the dev loop
+#    in step 3 picks up JS/CSS changes automatically via the symlinked
+#    Resources folder if you re-run `build:safari`)
+npm run safari:convert
+
+# 3. Build and run the host app
+open safari/Qwacky/Qwacky.xcodeproj
+# In Xcode: select the "Qwacky" scheme, then Product > Run.
+```
+
+**Enable the extension in Safari**
+1. Safari → Settings → Advanced → check "Show features for web developers"
+2. Develop → Developer Settings → check "Allow unsigned extensions"
+   (This resets each time Safari quits.)
+3. Safari → Settings → Extensions → enable Qwacky.
+
+The extension's host permission (`quack.duckduckgo.com`) is granted
+time-of-use on Safari — you'll see a one-tap prompt the first time the
+extension calls DuckDuckGo's API.
 
 # 💖 Support the Project
 

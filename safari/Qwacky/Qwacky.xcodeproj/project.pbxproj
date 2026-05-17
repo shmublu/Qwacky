@@ -1,0 +1,625 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CB5DB7502FB9FF3400D984B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5DB74F2FB9FF3400D984B8 /* AppDelegate.swift */; };
+		CB5DB7542FB9FF3400D984B8 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7522FB9FF3400D984B8 /* Main.html */; };
+		CB5DB7562FB9FF3400D984B8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7552FB9FF3400D984B8 /* Icon.png */; };
+		CB5DB7582FB9FF3400D984B8 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7572FB9FF3400D984B8 /* Style.css */; };
+		CB5DB75A2FB9FF3400D984B8 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7592FB9FF3400D984B8 /* Script.js */; };
+		CB5DB75C2FB9FF3400D984B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5DB75B2FB9FF3400D984B8 /* ViewController.swift */; };
+		CB5DB75F2FB9FF3400D984B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB75D2FB9FF3400D984B8 /* Main.storyboard */; };
+		CB5DB7612FB9FF3500D984B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7602FB9FF3500D984B8 /* Assets.xcassets */; };
+		CB5DB7682FB9FF3600D984B8 /* Qwacky Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CB5DB7672FB9FF3600D984B8 /* Qwacky Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CB5DB76D2FB9FF3600D984B8 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5DB76C2FB9FF3600D984B8 /* SafariWebExtensionHandler.swift */; };
+		CB5DB7812FB9FF3600D984B8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7792FB9FF3600D984B8 /* index.html */; };
+		CB5DB7822FB9FF3600D984B8 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77A2FB9FF3600D984B8 /* CHANGELOG.md */; };
+		CB5DB7832FB9FF3600D984B8 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77B2FB9FF3600D984B8 /* background.js */; };
+		CB5DB7842FB9FF3600D984B8 /* bypassExtensionRequirement.js in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77C2FB9FF3600D984B8 /* bypassExtensionRequirement.js */; };
+		CB5DB7852FB9FF3600D984B8 /* ddgEmailAuth.js in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77D2FB9FF3600D984B8 /* ddgEmailAuth.js */; };
+		CB5DB7862FB9FF3600D984B8 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77E2FB9FF3600D984B8 /* manifest.json */; };
+		CB5DB7872FB9FF3600D984B8 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB77F2FB9FF3600D984B8 /* assets */; };
+		CB5DB7882FB9FF3600D984B8 /* contentScript.js in Resources */ = {isa = PBXBuildFile; fileRef = CB5DB7802FB9FF3600D984B8 /* contentScript.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CB5DB7692FB9FF3600D984B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB5DB7442FB9FF3400D984B8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB5DB7662FB9FF3600D984B8;
+			remoteInfo = "Qwacky Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CB5DB7742FB9FF3600D984B8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CB5DB7682FB9FF3600D984B8 /* Qwacky Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CB5DB74C2FB9FF3400D984B8 /* Qwacky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Qwacky.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB5DB74F2FB9FF3400D984B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CB5DB7532FB9FF3400D984B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		CB5DB7552FB9FF3400D984B8 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		CB5DB7572FB9FF3400D984B8 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		CB5DB7592FB9FF3400D984B8 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		CB5DB75B2FB9FF3400D984B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CB5DB75E2FB9FF3400D984B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CB5DB7602FB9FF3500D984B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CB5DB7622FB9FF3500D984B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB5DB7672FB9FF3600D984B8 /* Qwacky Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Qwacky Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB5DB76C2FB9FF3600D984B8 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		CB5DB76E2FB9FF3600D984B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB5DB7792FB9FF3600D984B8 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = Resources/index.html; sourceTree = "<group>"; };
+		CB5DB77A2FB9FF3600D984B8 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = Resources/CHANGELOG.md; sourceTree = "<group>"; };
+		CB5DB77B2FB9FF3600D984B8 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
+		CB5DB77C2FB9FF3600D984B8 /* bypassExtensionRequirement.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = bypassExtensionRequirement.js; path = Resources/bypassExtensionRequirement.js; sourceTree = "<group>"; };
+		CB5DB77D2FB9FF3600D984B8 /* ddgEmailAuth.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = ddgEmailAuth.js; path = Resources/ddgEmailAuth.js; sourceTree = "<group>"; };
+		CB5DB77E2FB9FF3600D984B8 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
+		CB5DB77F2FB9FF3600D984B8 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Resources/assets; sourceTree = "<group>"; };
+		CB5DB7802FB9FF3600D984B8 /* contentScript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = contentScript.js; path = Resources/contentScript.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB5DB7492FB9FF3400D984B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB5DB7642FB9FF3600D984B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CB5DB7432FB9FF3400D984B8 = {
+			isa = PBXGroup;
+			children = (
+				CB5DB74E2FB9FF3400D984B8 /* Qwacky */,
+				CB5DB76B2FB9FF3600D984B8 /* Qwacky Extension */,
+				CB5DB74D2FB9FF3400D984B8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CB5DB74D2FB9FF3400D984B8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB5DB74C2FB9FF3400D984B8 /* Qwacky.app */,
+				CB5DB7672FB9FF3600D984B8 /* Qwacky Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB5DB74E2FB9FF3400D984B8 /* Qwacky */ = {
+			isa = PBXGroup;
+			children = (
+				CB5DB74F2FB9FF3400D984B8 /* AppDelegate.swift */,
+				CB5DB75B2FB9FF3400D984B8 /* ViewController.swift */,
+				CB5DB75D2FB9FF3400D984B8 /* Main.storyboard */,
+				CB5DB7602FB9FF3500D984B8 /* Assets.xcassets */,
+				CB5DB7622FB9FF3500D984B8 /* Info.plist */,
+				CB5DB7512FB9FF3400D984B8 /* Resources */,
+			);
+			path = Qwacky;
+			sourceTree = "<group>";
+		};
+		CB5DB7512FB9FF3400D984B8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CB5DB7522FB9FF3400D984B8 /* Main.html */,
+				CB5DB7552FB9FF3400D984B8 /* Icon.png */,
+				CB5DB7572FB9FF3400D984B8 /* Style.css */,
+				CB5DB7592FB9FF3400D984B8 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CB5DB76B2FB9FF3600D984B8 /* Qwacky Extension */ = {
+			isa = PBXGroup;
+			children = (
+				CB5DB7782FB9FF3600D984B8 /* Resources */,
+				CB5DB76C2FB9FF3600D984B8 /* SafariWebExtensionHandler.swift */,
+				CB5DB76E2FB9FF3600D984B8 /* Info.plist */,
+			);
+			path = "Qwacky Extension";
+			sourceTree = "<group>";
+		};
+		CB5DB7782FB9FF3600D984B8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CB5DB7792FB9FF3600D984B8 /* index.html */,
+				CB5DB77A2FB9FF3600D984B8 /* CHANGELOG.md */,
+				CB5DB77B2FB9FF3600D984B8 /* background.js */,
+				CB5DB77C2FB9FF3600D984B8 /* bypassExtensionRequirement.js */,
+				CB5DB77D2FB9FF3600D984B8 /* ddgEmailAuth.js */,
+				CB5DB77E2FB9FF3600D984B8 /* manifest.json */,
+				CB5DB77F2FB9FF3600D984B8 /* assets */,
+				CB5DB7802FB9FF3600D984B8 /* contentScript.js */,
+			);
+			name = Resources;
+			path = "Qwacky Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB5DB74B2FB9FF3400D984B8 /* Qwacky */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB5DB7752FB9FF3600D984B8 /* Build configuration list for PBXNativeTarget "Qwacky" */;
+			buildPhases = (
+				CB5DB7482FB9FF3400D984B8 /* Sources */,
+				CB5DB7492FB9FF3400D984B8 /* Frameworks */,
+				CB5DB74A2FB9FF3400D984B8 /* Resources */,
+				CB5DB7742FB9FF3600D984B8 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB5DB76A2FB9FF3600D984B8 /* PBXTargetDependency */,
+			);
+			name = Qwacky;
+			packageProductDependencies = (
+			);
+			productName = Qwacky;
+			productReference = CB5DB74C2FB9FF3400D984B8 /* Qwacky.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CB5DB7662FB9FF3600D984B8 /* Qwacky Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB5DB7712FB9FF3600D984B8 /* Build configuration list for PBXNativeTarget "Qwacky Extension" */;
+			buildPhases = (
+				CB5DB7632FB9FF3600D984B8 /* Sources */,
+				CB5DB7642FB9FF3600D984B8 /* Frameworks */,
+				CB5DB7652FB9FF3600D984B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Qwacky Extension";
+			packageProductDependencies = (
+			);
+			productName = "Qwacky Extension";
+			productReference = CB5DB7672FB9FF3600D984B8 /* Qwacky Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB5DB7442FB9FF3400D984B8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					CB5DB74B2FB9FF3400D984B8 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					CB5DB7662FB9FF3600D984B8 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+				};
+			};
+			buildConfigurationList = CB5DB7472FB9FF3400D984B8 /* Build configuration list for PBXProject "Qwacky" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CB5DB7432FB9FF3400D984B8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CB5DB74D2FB9FF3400D984B8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB5DB74B2FB9FF3400D984B8 /* Qwacky */,
+				CB5DB7662FB9FF3600D984B8 /* Qwacky Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CB5DB74A2FB9FF3400D984B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB5DB7562FB9FF3400D984B8 /* Icon.png in Resources */,
+				CB5DB75F2FB9FF3400D984B8 /* Main.storyboard in Resources */,
+				CB5DB75A2FB9FF3400D984B8 /* Script.js in Resources */,
+				CB5DB7542FB9FF3400D984B8 /* Main.html in Resources */,
+				CB5DB7612FB9FF3500D984B8 /* Assets.xcassets in Resources */,
+				CB5DB7582FB9FF3400D984B8 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB5DB7652FB9FF3600D984B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB5DB7842FB9FF3600D984B8 /* bypassExtensionRequirement.js in Resources */,
+				CB5DB7812FB9FF3600D984B8 /* index.html in Resources */,
+				CB5DB7872FB9FF3600D984B8 /* assets in Resources */,
+				CB5DB7882FB9FF3600D984B8 /* contentScript.js in Resources */,
+				CB5DB7832FB9FF3600D984B8 /* background.js in Resources */,
+				CB5DB7822FB9FF3600D984B8 /* CHANGELOG.md in Resources */,
+				CB5DB7862FB9FF3600D984B8 /* manifest.json in Resources */,
+				CB5DB7852FB9FF3600D984B8 /* ddgEmailAuth.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB5DB7482FB9FF3400D984B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB5DB75C2FB9FF3400D984B8 /* ViewController.swift in Sources */,
+				CB5DB7502FB9FF3400D984B8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB5DB7632FB9FF3600D984B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB5DB76D2FB9FF3600D984B8 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CB5DB76A2FB9FF3600D984B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB5DB7662FB9FF3600D984B8 /* Qwacky Extension */;
+			targetProxy = CB5DB7692FB9FF3600D984B8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CB5DB7522FB9FF3400D984B8 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB5DB7532FB9FF3400D984B8 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		CB5DB75D2FB9FF3400D984B8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB5DB75E2FB9FF3400D984B8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CB5DB76F2FB9FF3600D984B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CB5DB7702FB9FF3600D984B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		CB5DB7722FB9FF3600D984B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Qwacky Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Qwacky Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shmublu.Qwacky.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CB5DB7732FB9FF3600D984B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Qwacky Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Qwacky Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shmublu.Qwacky.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CB5DB7762FB9FF3600D984B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Qwacky/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Qwacky;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shmublu.Qwacky;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CB5DB7772FB9FF3600D984B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Qwacky/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Qwacky;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shmublu.Qwacky;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB5DB7472FB9FF3400D984B8 /* Build configuration list for PBXProject "Qwacky" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5DB76F2FB9FF3600D984B8 /* Debug */,
+				CB5DB7702FB9FF3600D984B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB5DB7712FB9FF3600D984B8 /* Build configuration list for PBXNativeTarget "Qwacky Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5DB7722FB9FF3600D984B8 /* Debug */,
+				CB5DB7732FB9FF3600D984B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB5DB7752FB9FF3600D984B8 /* Build configuration list for PBXNativeTarget "Qwacky" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5DB7762FB9FF3600D984B8 /* Debug */,
+				CB5DB7772FB9FF3600D984B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB5DB7442FB9FF3400D984B8 /* Project object */;
+}

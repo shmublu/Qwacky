@@ -13,10 +13,18 @@ build
 releases
 
 # Safari/Xcode
-safari/build/
+safari/**/build/
 safari/**/xcuserdata/
 safari/**/*.xcuserstate
 safari/**/DerivedData/
+
+# Web-extension resources copied into the Xcode project by `npm run safari:convert`.
+# They are regenerated from dist_safari/ — do not commit them.
+safari/**/Resources/assets/
+safari/**/Resources/*.js
+safari/**/Resources/*.html
+safari/**/Resources/manifest.json
+safari/**/Resources/CHANGELOG.md
 
 # Local scripts
 scripts/package.js
