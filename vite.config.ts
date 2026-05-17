@@ -5,53 +5,60 @@ import { copyFileSync, mkdirSync, existsSync, readFileSync, writeFileSync } from
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
-const copyManifest = () => {
-  return {
-    name: 'copy-manifest',
-    writeBundle: () => {
-      const browser = process.env.BROWSER === 'firefox' ? 'firefox' : 'chrome'
-      const outDir = browser === 'firefox' ? 'dist_firefox' : 'dist_chrome'
+const BROWSER_CONFIG = {
+  chrome:  { outDir: 'dist_chrome',  manifest: 'manifest.chrome.json',  includePolyfill: true  },
+  firefox: { outDir: 'dist_firefox', manifest: 'manifest.firefox.json', includePolyfill: true  },
+  safari:  { outDir: 'dist_safari',  manifest: 'manifest.safari.json',  includePolyfill: false },
+} as const
 
-      mkdirSync(`${outDir}/assets/icons`, { recursive: true })
+type BrowserTarget = keyof typeof BROWSER_CONFIG
 
-      const manifestFile = browser === 'firefox' ? 'manifest.firefox.json' : 'manifest.chrome.json'
-      const manifestContent = readFileSync(manifestFile, 'utf-8')
-      const finalManifest = process.env.RELEASE === 'true'
-        ? manifestContent.replace('qwacky@local-v1.0.1', 'qwacky@store-v1.0.1')
-        : manifestContent
-      writeFileSync(`${outDir}/manifest.json`, finalManifest)
+const copyManifest = (target: BrowserTarget) => ({
+  name: 'copy-manifest',
+  writeBundle: () => {
+    const { outDir, manifest, includePolyfill } = BROWSER_CONFIG[target]
 
-      const iconSizes = ['16', '48', '128']
-      iconSizes.forEach(size => {
-        copyFileSync(`assets/icons/qwacky-${size}.png`, `${outDir}/assets/icons/qwacky-${size}.png`)
-      })
+    mkdirSync(`${outDir}/assets/icons`, { recursive: true })
 
-      copyFileSync('assets/icons/qwacky.png', `${outDir}/assets/icons/qwacky.png`)
+    const manifestContent = readFileSync(manifest, 'utf-8')
+    const finalManifest = process.env.RELEASE === 'true'
+      ? manifestContent.replace('qwacky@local-v1.0.1', 'qwacky@store-v1.0.1')
+      : manifestContent
+    writeFileSync(`${outDir}/manifest.json`, finalManifest)
 
+    for (const size of ['16', '48', '128']) {
+      copyFileSync(`assets/icons/qwacky-${size}.png`, `${outDir}/assets/icons/qwacky-${size}.png`)
+    }
+    copyFileSync('assets/icons/qwacky.png', `${outDir}/assets/icons/qwacky.png`)
+
+    if (includePolyfill) {
       const polyfillPath = 'node_modules/webextension-polyfill/dist/browser-polyfill.js'
       if (existsSync(polyfillPath)) {
         copyFileSync(polyfillPath, `${outDir}/browser-polyfill.js`)
       }
-
-      copyFileSync('CHANGELOG.md', `${outDir}/CHANGELOG.md`)
     }
-  }
-}
+
+    copyFileSync('CHANGELOG.md', `${outDir}/CHANGELOG.md`)
+  },
+})
+
+const FIXED_NAME_ENTRIES = new Set(['background', 'contentScript', 'bypassExtensionRequirement', 'ddgEmailAuth'])
 
 export default defineConfig(({ mode }) => {
-  process.env.BROWSER = mode === 'firefox' ? 'firefox' : 'chrome'
-  const outDir = process.env.BROWSER === 'firefox' ? 'dist_firefox' : 'dist_chrome'
+  const target: BrowserTarget = (mode in BROWSER_CONFIG ? mode : 'chrome') as BrowserTarget
+  const { outDir } = BROWSER_CONFIG[target]
 
   return {
-    plugins: [react(), copyManifest()],
+    plugins: [react(), copyManifest(target)],
     define: {
       __APP_VERSION__: JSON.stringify(pkg.version),
-      'process.env.BROWSER': JSON.stringify(process.env.BROWSER)
+      'process.env.BROWSER': JSON.stringify(target),
     },
     build: {
       outDir,
       sourcemap: false,
       emptyOutDir: true,
+      target: target === 'safari' ? 'safari17' : 'es2020',
       rollupOptions: {
         input: {
           popup: resolve(__dirname, 'index.html'),
@@ -62,12 +69,7 @@ export default defineConfig(({ mode }) => {
         },
         output: {
           format: 'esm',
-          entryFileNames: chunk => {
-            if (chunk.name === 'background' || chunk.name === 'contentScript' || chunk.name === 'bypassExtensionRequirement' || chunk.name === 'ddgEmailAuth') {
-              return '[name].js'
-            }
-            return 'assets/[name].[hash].js'
-          },
+          entryFileNames: chunk => FIXED_NAME_ENTRIES.has(chunk.name) ? '[name].js' : 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]'
         }

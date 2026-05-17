@@ -8,8 +8,15 @@ package-lock.json
 dist
 dist_chrome
 dist_firefox
+dist_safari
 build
 releases
+
+# Safari/Xcode
+safari/build/
+safari/**/xcuserdata/
+safari/**/*.xcuserstate
+safari/**/DerivedData/
 
 # Local scripts
 scripts/package.js

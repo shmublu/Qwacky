@@ -27,15 +27,20 @@
     "dev": "vite build --watch --mode development",
     "predev:firefox": "node scripts/update-version.js",
     "dev:firefox": "vite build --watch --mode firefox",
+    "predev:safari": "node scripts/update-version.js",
+    "dev:safari": "vite build --watch --mode safari",
     "prebuild": "node scripts/update-version.js",
     "build": "tsc && vite build --mode production",
     "prebuild:firefox": "node scripts/update-version.js",
     "build:firefox": "tsc && vite build --mode firefox",
+    "prebuild:safari": "node scripts/update-version.js",
+    "build:safari": "tsc && vite build --mode safari",
     "preview": "vite preview",
-    "clean": "rm -rf dist_chrome dist_firefox",
+    "clean": "rm -rf dist_chrome dist_firefox dist_safari",
     "update-version": "node scripts/update-version.js",
     "package:chrome": "RELEASE=true npm run build && node scripts/package.js chrome",
     "package:firefox": "RELEASE=true npm run build:firefox && node scripts/package.js firefox",
-    "package": "npm run package:chrome && npm run package:firefox"
+    "package": "npm run package:chrome && npm run package:firefox",
+    "safari:convert": "xcrun safari-web-extension-converter ./dist_safari --project-location ./safari --app-name Qwacky --bundle-identifier com.shmublu.qwacky --macos-only --swift --copy-resources --no-open --force"
   }
 }
