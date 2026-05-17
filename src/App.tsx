@@ -3,14 +3,15 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Login } from './pages/Login'
 import { OTP } from './pages/OTP'
 import { Dashboard } from './pages/Dashboard'
-import { Settings } from './pages/Settings'
-import { Changelog } from './pages/Changelog'
-import { About } from './pages/About'
-import { MyAccount } from './pages/MyAccount'
 import { Header } from './components/Header'
 import { ConfirmDialog } from './components/ConfirmDialog'
 import { theme } from './theme'
-import { useState, useEffect } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
+
+const Settings   = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })))
+const Changelog  = lazy(() => import('./pages/Changelog').then(m => ({ default: m.Changelog })))
+const About      = lazy(() => import('./pages/About').then(m => ({ default: m.About })))
+const MyAccount  = lazy(() => import('./pages/MyAccount').then(m => ({ default: m.MyAccount })))
 
 const APP_VERSION = __APP_VERSION__
 
@@ -316,7 +317,7 @@ export const App = () => {
           onAboutClick={toggleAbout}
           onMyAccountClick={toggleMyAccount}
         />
-        {renderCurrentPage()}
+        <Suspense fallback={null}>{renderCurrentPage()}</Suspense>
         <ConfirmDialog
           isOpen={autoLoginAccount !== null}
           variant="info"

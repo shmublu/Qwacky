@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "preact": "^10.29.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
@@ -18,9 +19,9 @@
     "@types/react-dom": "^18.0.11",
     "@types/styled-components": "^5.1.26",
     "@vitejs/plugin-react": "^4.3.4",
+    "archiver": "^7.0.1",
     "typescript": "^4.9.5",
-    "vite": "^6.2.2",
-    "archiver": "^7.0.1"
+    "vite": "^6.2.2"
   },
   "scripts": {
     "predev": "node scripts/update-version.js",

@@ -84,8 +84,14 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src')
-      }
+        '@': resolve(__dirname, 'src'),
+        'react': 'preact/compat',
+        'react-dom': 'preact/compat',
+        'react-dom/client': 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
+        'react/jsx-runtime': 'preact/jsx-runtime',
+      },
+      dedupe: ['preact', 'preact/compat'],
     }
   }
 })
