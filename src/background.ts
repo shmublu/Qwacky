@@ -25,6 +25,14 @@ const CONTEXT_MENU_ID = 'generate-duck-address'
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
 const isAndroid = navigator.userAgent.toLowerCase().includes('android')
 
+// Hostnames are clamped before being stored as alias notes. Valid hostnames are
+// ASCII (DNS) or punycode-encoded; reject control characters and cap length.
+const safeHostname = (host: string): string => {
+  if (typeof host !== 'string') return ''
+  const cleaned = host.replace(/[^\x20-\x7E]/g, '')
+  return cleaned.slice(0, 100)
+}
+
 const FeatureState = {
   async get(): Promise<boolean> {
     const result = await api.storage.local.get(FEATURE_STATE_KEY)
@@ -199,6 +207,18 @@ setTimeout(initialize, 1000)
 api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!message || typeof message !== 'object' || typeof message.action !== 'string') {
     return false
+  }
+
+  // The auto-login action installs a bearer token into storage and switches the
+  // active account. Only accept it from our own extension running on the DDG
+  // email page, where ddgEmailAuth.ts is the only sender that should fire it.
+  if (message.action === 'auto-login') {
+    const senderIsOurs = _sender?.id === api.runtime.id
+    const fromDdgEmail = typeof _sender?.tab?.url === 'string' && _sender.tab.url.startsWith('https://duckduckgo.com/email/')
+    if (!senderIsOurs || !fromDdgEmail) {
+      sendResponse({ status: 'error', message: 'Unauthorized sender' })
+      return true
+    }
   }
 
   if (message.action === 'getFeatureState') {
@@ -404,7 +424,7 @@ if (api.contextMenus) {
       let domain = ''
       if (tab.url) {
         try {
-          domain = new URL(tab.url).hostname
+          domain = safeHostname(new URL(tab.url).hostname)
         } catch {}
       }
 
@@ -449,7 +469,7 @@ if (api.commands) {
       let domain = ''
       if (activeTab.url) {
         try {
-          domain = new URL(activeTab.url).hostname
+          domain = safeHostname(new URL(activeTab.url).hostname)
         } catch {}
       }
 

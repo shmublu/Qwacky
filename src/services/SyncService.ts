@@ -498,10 +498,7 @@ export class SyncService {
     const accountKey = `addresses_${username}`;
     
     const cached = await this.getFromSessionCache(accountKey);
-    if (cached) {
-      console.log('Session cache hit for', accountKey);
-      return cached;
-    }
+    if (cached) return cached;
 
     try {
       const result = await chrome.storage.sync.get(accountKey);

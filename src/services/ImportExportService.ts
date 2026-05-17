@@ -301,17 +301,19 @@ export class ImportExportService {
             generated_addresses: allAddresses
           });
         } else {
-          const currentAcct = session.accounts.find(a => a.username === session.currentAccount);
-          if (!currentAcct) {
-            return { success: false, hasSession: false, error: 'Current account not found in session data' };
-          }
+          // Import account metadata and aliases, but never install a bearer token
+          // from a file — that would let a malicious backup silently swap the user
+          // onto an attacker-controlled DDG account. The user re-authenticates via
+          // OTP on the login screen, after which the imported aliases attach to
+          // their session.
+          const sanitizedAccounts = mergedAccounts.map(a => ({
+            ...a,
+            userData: a.userData ? { ...a.userData, user: { ...(a.userData as any).user, access_token: undefined } } : a.userData
+          }));
           await chrome.storage.local.set({
-            user_data: currentAcct.userData,
-            access_token: currentAcct.userData.user.access_token,
-            accounts: mergedAccounts,
-            currentAccount: session.currentAccount,
+            accounts: sanitizedAccounts,
             generated_addresses: allAddresses,
-            loginState: 'dashboard'
+            loginState: 'login'
           });
         }
 
