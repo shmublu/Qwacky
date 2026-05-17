@@ -4,8 +4,6 @@
 <dict>
     <key>com.apple.security.app-sandbox</key>
     <true/>
-    <key>com.apple.security.network.client</key>
-    <true/>
     <key>com.apple.security.files.user-selected.read-write</key>
     <true/>
     <key>com.apple.security.application-groups</key>
@@ -14,8 +12,7 @@
     </array>
     <!--
       Optional: enable iCloud Key-Value Storage for automatic cross-device
-      sync (no folder picker needed). Requires a paid Apple Developer
-      Program membership.
+      sync. Requires a paid Apple Developer Program membership.
         <key>com.apple.developer.ubiquity-kvstore-identifier</key>
         <string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
     -->

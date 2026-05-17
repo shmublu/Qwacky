@@ -53,11 +53,20 @@ Safari requires extensions to be packaged in a native macOS app and code-signed.
 5. In Xcode, set signing on **both** targets (Qwacky + Qwacky Extension):
    - Project navigator (blue icon) → target → **Signing & Capabilities**.
    - Check **Automatically manage signing**, pick your Personal Team. If empty, add your Apple ID via **Xcode → Settings → Accounts**.
-6. (Optional, recommended) Enable iCloud sync for the **Qwacky Extension** target only:
-   - Same **Signing & Capabilities** tab → click **+ Capability** → pick **iCloud**.
-   - In the iCloud row, check **Key-Value Storage**. Leave CloudKit unchecked.
-   - That writes the `com.apple.developer.ubiquity-kvstore-identifier` entitlement and lets aliases roam between your Macs through iCloud. Without this step the extension still works; sync just stays local.
-7. Press **⌘R** to build and run. A small "Qwacky" window will open — you can close it.
+6. **Enable cross-device sync** (recommended). Two options:
+
+   **Option C — Folder in iCloud Drive (free Apple ID, default)** — Recommended.
+   - Pick the **Qwacky Extension** target → **Signing & Capabilities** → **+ Capability** → **App Groups** → add `group.com.shmublu.Qwacky`.
+   - Repeat for the **Qwacky** (host app) target — same group ID.
+   - The repo ships `Qwacky_Extension.entitlements` and `Qwacky.entitlements` with `com.apple.security.files.user-selected.read-write` already declared, so the host app can ask you to pick a sync folder. If you'd rather start from Xcode's defaults: open the generated `.entitlements` file in each target after step (5) and add the key manually.
+   - After ⌘R, the Qwacky host app shows a "Cross-device sync" section with a "Choose Folder…" button. Pick a folder inside `~/Library/Mobile Documents/com~apple~CloudDocs/` (your iCloud Drive). The extension writes one JSON file there and iCloud Drive syncs it across your Macs. On each Mac, pick the same folder once.
+
+   **Option B — iCloud Key-Value Storage (requires paid Apple Developer Program, $99/yr)** — Optional.
+   - Same **Signing & Capabilities** tab → **+ Capability** → **iCloud** → check **Key-Value Storage**.
+   - This adds the `com.apple.developer.ubiquity-kvstore-identifier` entitlement (paid only). When present, the extension uses iCloud KVS automatically and ignores the folder picker. 1 MB / 1024-key cap.
+
+   **Skip both** — the extension still works, aliases stay local to this Mac. Use **Settings → Backup → Export** to move data manually.
+7. Press **⌘R** to build and run.
 8. Enable the extension in Safari:
    1. Safari → Settings → Advanced → check **Show features for web developers**.
    2. Develop → Developer Settings → check **Allow unsigned extensions**. ⚠️ Resets every time you quit Safari.

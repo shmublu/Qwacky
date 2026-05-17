@@ -3,7 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <link rel="stylesheet" href="../Style.css">
@@ -11,9 +10,19 @@
 </head>
 <body>
     <img src="../Icon.png" width="128" height="128" alt="Qwacky Icon">
-    <p class="state-unknown">You can turn on Qwacky’s extension in Safari Extensions preferences.</p>
-    <p class="state-on">Qwacky’s extension is currently on. You can turn it off in Safari Extensions preferences.</p>
-    <p class="state-off">Qwacky’s extension is currently off. You can turn it on in Safari Extensions preferences.</p>
+    <p class="state-unknown">You can turn on Qwacky's extension in Safari Extensions preferences.</p>
+    <p class="state-on">Qwacky's extension is currently on. You can turn it off in Safari Extensions preferences.</p>
+    <p class="state-off">Qwacky's extension is currently off. You can turn it on in Safari Extensions preferences.</p>
     <button class="open-preferences">Quit and Open Safari Extensions Preferences…</button>
+
+    <section class="sync">
+        <h3>Cross-device sync</h3>
+        <p id="sync-status" class="sync-status">No sync folder selected — aliases stay on this Mac.</p>
+        <p class="sync-hint">Pick a folder inside <strong>iCloud Drive</strong> to sync aliases between your Macs. The extension writes a single JSON file there; iCloud Drive handles the rest.</p>
+        <div class="sync-buttons">
+            <button id="pick-sync-folder">Choose Folder…</button>
+            <button id="clear-sync-folder" hidden>Clear</button>
+        </div>
+    </section>
 </body>
 </html>

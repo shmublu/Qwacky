@@ -43,3 +43,33 @@ body.state-off :is(.state-on, .state-unknown) {
 button {
     font-size: 1em;
 }
+
+.sync {
+    margin-top: calc(var(--spacing) * 1.5);
+    padding-top: var(--spacing);
+    border-top: 1px solid rgba(127, 127, 127, 0.3);
+    max-width: 360px;
+}
+
+.sync h3 {
+    margin: 0 0 8px;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.sync-status {
+    margin: 0 0 6px;
+    font-weight: 500;
+}
+
+.sync-hint {
+    margin: 0 0 12px;
+    opacity: 0.75;
+    font-size: 0.9em;
+}
+
+.sync-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
