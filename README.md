@@ -53,13 +53,17 @@ Safari requires extensions to be packaged in a native macOS app and code-signed.
 5. In Xcode, set signing on **both** targets (Qwacky + Qwacky Extension):
    - Project navigator (blue icon) → target → **Signing & Capabilities**.
    - Check **Automatically manage signing**, pick your Personal Team. If empty, add your Apple ID via **Xcode → Settings → Accounts**.
-6. Press **⌘R** to build and run. A small "Qwacky" window will open — you can close it.
-7. Enable the extension in Safari:
+6. (Optional, recommended) Enable iCloud sync for the **Qwacky Extension** target only:
+   - Same **Signing & Capabilities** tab → click **+ Capability** → pick **iCloud**.
+   - In the iCloud row, check **Key-Value Storage**. Leave CloudKit unchecked.
+   - That writes the `com.apple.developer.ubiquity-kvstore-identifier` entitlement and lets aliases roam between your Macs through iCloud. Without this step the extension still works; sync just stays local.
+7. Press **⌘R** to build and run. A small "Qwacky" window will open — you can close it.
+8. Enable the extension in Safari:
    1. Safari → Settings → Advanced → check **Show features for web developers**.
    2. Develop → Developer Settings → check **Allow unsigned extensions**. ⚠️ Resets every time you quit Safari.
    3. Safari → Settings → Extensions → toggle on **Qwacky**.
    4. Click the puzzle-piece icon in Safari's toolbar → pin Qwacky.
-8. Optional — set a keyboard shortcut (see [Behavior differences on Safari](#behavior-differences-on-safari) below for the version-dependent steps). Avoid `Option+anything-letter` on Mac because Option emits Unicode characters (e.g. Option+Shift+Q types `⅝`, not a shortcut). Safe choices: `Cmd+Shift+E`, `Ctrl+Cmd+Q`, or `Cmd+Shift+9`.
+9. Optional — set a keyboard shortcut (see [Behavior differences on Safari](#behavior-differences-on-safari) below for the version-dependent steps). Avoid `Option+anything-letter` on Mac because Option emits Unicode characters (e.g. Option+Shift+Q types `⅝`, not a shortcut). Safe choices: `Cmd+Shift+E`, `Ctrl+Cmd+Q`, or `Cmd+Shift+9`.
 
 ### Chrome / Firefox
 
@@ -82,7 +86,8 @@ Use the upstream store listings — those builds in this fork track upstream fea
 - **Click-to-copy banner** instead of input fill. On Chrome and Firefox the shortcut and context menu type the alias into the focused input. On Safari, they show a small banner in the top-right with the alias; clicking it copies to the clipboard. This is deliberate so password managers (Bitwarden, 1Password, iCloud Keychain) still own the save-credentials flow.
 - **Keyboard shortcut needs to be assigned manually.** Safari ignores `suggested_key` in the manifest. On **Safari 26+ (macOS Tahoe)** you can bind it under Safari → Settings → Extensions → Qwacky → Keyboard Shortcuts. On **Safari 17/18** there is no built-in GUI for extension shortcuts — use **System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts → +**, pick Safari, and enter the exact menu-item title `Generate and fill duck address`. Until you bind one, use the toolbar icon's **Generate** button.
 - **Host permission is time-of-use.** Safari prompts for `quack.duckduckgo.com` access the first time the extension actually calls DDG, not at install time.
-- **Cross-device sync is disabled on Safari.** Safari's `storage.sync` is local-only (it doesn't route to iCloud), so your aliases stay on the current Mac. Use Settings → Backup to roam between machines manually. A future version may add CloudKit sync via the host app.
+- **No auto-login from DDG's website.** On Chrome/Firefox, Qwacky watches the duck.com email page and picks up your bearer token when you log in there. The Safari build removes this — the only login path is the popup's OTP flow. Reason: the page-side token sniff broadcasts via `window.postMessage`, which any other extension or page script on duck.com can observe. You stay logged in once the token is in local storage; you only re-OTP if you sign out or move to a new Mac.
+- **Cross-device sync runs through iCloud Key-Value Storage** when you enable the iCloud capability in Xcode (see Install step 6 below). 1 MB / 1024-key cap — plenty for Qwacky's alias data. Without the capability the extension still works, just locally.
 
 ## Permissions
 

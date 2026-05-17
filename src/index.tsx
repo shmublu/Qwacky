@@ -1,9 +1,12 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { installSafariSyncShim } from './safariSyncShim'
 import { App } from './App'
 import { AppProvider } from './context/AppContext'
 import { PermissionProvider } from './context/PermissionContext'
 import { ErrorBoundary } from './components/ErrorBoundary'
+
+installSafariSyncShim()
 
 const container = document.getElementById('root')
 if (!container) {

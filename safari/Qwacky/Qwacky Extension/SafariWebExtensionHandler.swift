@@ -2,41 +2,107 @@
 //  SafariWebExtensionHandler.swift
 //  Qwacky Extension
 //
-//  Created by Shmuel Berman on 5/17/26.
+//  Bridges `browser.runtime.sendNativeMessage` from JS into iCloud
+//  key-value storage, so chrome.storage.sync can roam across the user's
+//  Apple ID-signed-in Macs. iCloud KVS is free (no paid Apple Developer
+//  Program required), encrypted by iCloud, and gives us 1 MB / 1024 keys,
+//  / 1 MB per key — plenty for Qwacky's alias lists and account metadata.
+//
+//  Protocol — all messages are JSON dictionaries:
+//    { "action": "get",    "key": "..." }            -> { "value": <any|null> }
+//    { "action": "getAll" }                          -> { "items": { k: v, ... } }
+//    { "action": "set",    "key": "...", "value": ... } -> { "ok": true }
+//    { "action": "remove", "key": "..." }            -> { "ok": true }
+//    { "action": "clear" }                           -> { "ok": true }
+//    { "action": "bytes" }                           -> { "bytes": <int>, "quota": 1048576 }
+//
+//  If the iCloud KVS entitlement is missing (capability not enabled in
+//  Xcode), the store still works locally as a no-op stand-in — the
+//  extension stays functional, sync just doesn't cross devices.
 //
 
 import SafariServices
+import Foundation
 import os.log
 
 class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
     func beginRequest(with context: NSExtensionContext) {
-        let request = context.inputItems.first as? NSExtensionItem
-
-        let profile: UUID?
-        if #available(iOS 17.0, macOS 14.0, *) {
-            profile = request?.userInfo?[SFExtensionProfileKey] as? UUID
-        } else {
-            profile = request?.userInfo?["profile"] as? UUID
-        }
-
+        let item = context.inputItems.first as? NSExtensionItem
         let message: Any?
         if #available(iOS 15.0, macOS 11.0, *) {
-            message = request?.userInfo?[SFExtensionMessageKey]
+            message = item?.userInfo?[SFExtensionMessageKey]
         } else {
-            message = request?.userInfo?["message"]
+            message = item?.userInfo?["message"]
         }
 
-        os_log(.default, "Received message from browser.runtime.sendNativeMessage: %@ (profile: %@)", String(describing: message), profile?.uuidString ?? "none")
+        let response = handle(message)
 
-        let response = NSExtensionItem()
+        let out = NSExtensionItem()
         if #available(iOS 15.0, macOS 11.0, *) {
-            response.userInfo = [ SFExtensionMessageKey: [ "echo": message ] ]
+            out.userInfo = [SFExtensionMessageKey: response]
         } else {
-            response.userInfo = [ "message": [ "echo": message ] ]
+            out.userInfo = ["message": response]
         }
-
-        context.completeRequest(returningItems: [ response ], completionHandler: nil)
+        context.completeRequest(returningItems: [out], completionHandler: nil)
     }
 
+    // MARK: - Message dispatch
+
+    private func handle(_ message: Any?) -> [String: Any] {
+        guard let dict = message as? [String: Any],
+              let action = dict["action"] as? String else {
+            return ["error": "missing or invalid action"]
+        }
+
+        let store = NSUbiquitousKeyValueStore.default
+        store.synchronize()
+
+        switch action {
+        case "get":
+            guard let key = dict["key"] as? String else { return ["error": "missing key"] }
+            return ["value": store.object(forKey: key) ?? NSNull()]
+
+        case "getAll":
+            return ["items": store.dictionaryRepresentation]
+
+        case "set":
+            guard let key = dict["key"] as? String, let value = dict["value"] else {
+                return ["error": "missing key or value"]
+            }
+            store.set(value, forKey: key)
+            store.synchronize()
+            return ["ok": true]
+
+        case "remove":
+            guard let key = dict["key"] as? String else { return ["error": "missing key"] }
+            store.removeObject(forKey: key)
+            store.synchronize()
+            return ["ok": true]
+
+        case "clear":
+            for key in store.dictionaryRepresentation.keys {
+                store.removeObject(forKey: key)
+            }
+            store.synchronize()
+            return ["ok": true]
+
+        case "bytes":
+            // NSUbiquitousKeyValueStore doesn't expose a "bytes used" API; we
+            // estimate by re-encoding the dictionary representation as JSON.
+            let bytes = byteSize(of: store.dictionaryRepresentation)
+            return ["bytes": bytes, "quota": 1_048_576]
+
+        default:
+            os_log(.default, "Qwacky: unknown action %@", action)
+            return ["error": "unknown action: \(action)"]
+        }
+    }
+
+    private func byteSize(of dict: [String: Any]) -> Int {
+        guard let data = try? JSONSerialization.data(withJSONObject: dict, options: []) else {
+            return 0
+        }
+        return data.count
+    }
 }

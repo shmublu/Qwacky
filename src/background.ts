@@ -1,3 +1,6 @@
+import { installSafariSyncShim } from './safariSyncShim'
+installSafariSyncShim()
+
 type BrowserType = typeof chrome;
 
 interface FirefoxBrowserType extends BrowserType {
@@ -337,7 +340,6 @@ api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     ;(async () => {
       try {
         const headers: Record<string, string> = {
-          'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36',
           'authorization': `Bearer ${token}`
         }
 

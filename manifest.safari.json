@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Qwacky",
+  "version": "2.0.0",
+  "description": "Qwacky is an open source client for DuckDuckGo Email Protection, To manage and generate @duck.com aliases.",
+  "icons": {
+    "16": "assets/icons/qwacky-16.png",
+    "48": "assets/icons/qwacky-48.png",
+    "128": "assets/icons/qwacky-128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "assets/icons/qwacky.png"
+  },
+  "permissions": [
+    "storage",
+    "nativeMessaging"
+  ],
+  "optional_permissions": [
+    "contextMenus",
+    "clipboardWrite",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  },
+  "host_permissions": [
+    "https://quack.duckduckgo.com/*"
+  ],
+  "commands": {
+    "generate-duck-address": {
+      "suggested_key": {
+        "default": "Alt+Shift+Q"
+      },
+      "description": "Generate and fill duck address"
+    }
+  }
+}

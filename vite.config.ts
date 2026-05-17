@@ -8,9 +8,11 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 const BROWSER_CONFIG = {
   chrome:  { outDir: 'dist_chrome',  manifest: 'manifest.chrome.json',  includePolyfill: true  },
   firefox: { outDir: 'dist_firefox', manifest: 'manifest.firefox.json', includePolyfill: true  },
-  // Safari shares the chrome manifest until they need to diverge. Safari ships
-  // browser.* natively so the polyfill copy is skipped.
-  safari:  { outDir: 'dist_safari',  manifest: 'manifest.chrome.json',  includePolyfill: false },
+  // Safari has its own manifest: no content_scripts (the MAIN-world token
+  // sniffer broadcasts via window.postMessage and is removed for safety) and
+  // adds the nativeMessaging permission for iCloud KVS sync via the host app.
+  // Safari ships browser.* natively so the polyfill copy is also skipped.
+  safari:  { outDir: 'dist_safari',  manifest: 'manifest.safari.json',  includePolyfill: false },
 } as const
 
 type BrowserTarget = keyof typeof BROWSER_CONFIG

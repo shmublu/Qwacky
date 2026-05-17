@@ -2,9 +2,10 @@ export class AuthService {
   private headers: Record<string, string>
 
   constructor() {
-    this.headers = {
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36'
-    }
+    // Let the browser send its real User-Agent. The previous hardcoded
+    // Chrome-on-Windows string made Qwacky traffic distinctive on every
+    // non-Chrome platform — exactly the opposite of what it intended.
+    this.headers = {}
   }
 
   async requestOTP(username: string) {
