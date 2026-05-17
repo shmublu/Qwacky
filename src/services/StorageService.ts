@@ -70,11 +70,10 @@ export class StorageService {
         generated_addresses: [newAddress, ...otherUserAddresses]
       });
 
-      try {
-        await this.syncService.saveAddressesToSync(username, updatedAddresses);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      // Fire-and-forget — sync writes must not block the UI on the await
+      // when the native messaging round-trip is slow or unavailable.
+      this.syncService.saveAddressesToSync(username, updatedAddresses)
+        .catch(err => console.error('Sync error (non-fatal):', err));
     } catch (error) {
       console.error('Error saving generated address:', error);
     }
@@ -235,11 +234,8 @@ export class StorageService {
       
       await chrome.storage.local.set({ generated_addresses: updatedGlobalAddresses });
 
-      try {
-        await this.syncService.saveAddressesToSync(username, updatedAccountAddresses);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveAddressesToSync(username, updatedAccountAddresses)
+        .catch(err => console.error('Sync error (non-fatal):', err));
       
       return true;
     } catch (error) {
@@ -280,11 +276,8 @@ export class StorageService {
 
       await chrome.storage.local.set({ generated_addresses: updatedGlobalAddresses });
 
-      try {
-        await this.syncService.saveAddressesToSync(username, updatedAccountAddresses);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveAddressesToSync(username, updatedAccountAddresses)
+        .catch(err => console.error('Sync error (non-fatal):', err));
 
       return true;
     } catch (error) {
@@ -319,11 +312,8 @@ export class StorageService {
       
       await chrome.storage.local.set({ generated_addresses: filteredGlobalAddresses });
 
-      try {
-        await this.syncService.saveAddressesToSync(username, filteredAccountAddresses);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveAddressesToSync(username, filteredAccountAddresses)
+        .catch(err => console.error('Sync error (non-fatal):', err));
       
       return true;
     } catch (error) {
@@ -353,11 +343,8 @@ export class StorageService {
 
       await this.updateAddressCount(0);
 
-      try {
-        await this.syncService.saveAddressesToSync(username, []);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveAddressesToSync(username, [])
+        .catch(err => console.error('Sync error (non-fatal):', err));
       
       return true;
     } catch (error) {
@@ -404,11 +391,7 @@ export class StorageService {
         const updatedList = [updated, ...filtered];
         await chrome.storage.local.set({ [key]: updatedList });
 
-        try {
-          await this.syncService.saveReverseAliasesToSync(username, updatedList);
-        } catch (syncError) {
-          console.error('Sync error (non-fatal):', syncError);
-        }
+        this.syncService.saveReverseAliasesToSync(username, updatedList).catch(err => console.error("Sync error (non-fatal):", err));
         return;
       }
 
@@ -424,11 +407,7 @@ export class StorageService {
       const updated = [newAlias, ...existing];
       await chrome.storage.local.set({ [key]: updated });
 
-      try {
-        await this.syncService.saveReverseAliasesToSync(username, updated);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveReverseAliasesToSync(username, updated).catch(err => console.error("Sync error (non-fatal):", err));
     } catch (error) {
       console.error('Error saving reverse alias:', error);
     }
@@ -472,11 +451,7 @@ export class StorageService {
 
       await chrome.storage.local.set({ [key]: updated });
 
-      try {
-        await this.syncService.saveReverseAliasesToSync(username, updated);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveReverseAliasesToSync(username, updated).catch(err => console.error("Sync error (non-fatal):", err));
 
       return true;
     } catch (error) {
@@ -502,11 +477,7 @@ export class StorageService {
 
       await chrome.storage.local.set({ [key]: updated });
 
-      try {
-        await this.syncService.saveReverseAliasesToSync(username, updated);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveReverseAliasesToSync(username, updated).catch(err => console.error("Sync error (non-fatal):", err));
 
       return true;
     } catch (error) {
@@ -527,11 +498,7 @@ export class StorageService {
       const filtered = aliases.filter(a => a.recipientEmail !== recipientEmail);
       await chrome.storage.local.set({ [key]: filtered });
 
-      try {
-        await this.syncService.saveReverseAliasesToSync(username, filtered);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveReverseAliasesToSync(username, filtered).catch(err => console.error("Sync error (non-fatal):", err));
 
       return true;
     } catch (error) {
@@ -548,11 +515,7 @@ export class StorageService {
       const key = `reverse_aliases_${username}`;
       await chrome.storage.local.set({ [key]: [] });
 
-      try {
-        await this.syncService.saveReverseAliasesToSync(username, []);
-      } catch (syncError) {
-        console.error('Sync error (non-fatal):', syncError);
-      }
+      this.syncService.saveReverseAliasesToSync(username, []).catch(err => console.error("Sync error (non-fatal):", err));
 
       return true;
     } catch (error) {

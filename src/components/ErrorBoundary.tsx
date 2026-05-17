@@ -37,13 +37,18 @@ const ReloadButton = styled.button`
 
 interface State {
   hasError: boolean
+  message?: string
 }
 
 export class ErrorBoundary extends React.Component<{ children: React.ReactNode }, State> {
   state: State = { hasError: false }
 
-  static getDerivedStateFromError(): State {
-    return { hasError: true }
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, message: error?.message }
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('Qwacky error boundary:', error, info)
   }
 
   render() {
@@ -51,7 +56,7 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
       return (
         <ErrorContainer>
           <ErrorTitle>Something went wrong</ErrorTitle>
-          <ErrorMessage>The extension encountered an unexpected error.</ErrorMessage>
+          <ErrorMessage>{this.state.message || 'The extension encountered an unexpected error.'}</ErrorMessage>
           <ReloadButton onClick={() => window.location.reload()}>
             Reload Extension
           </ReloadButton>

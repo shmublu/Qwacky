@@ -326,7 +326,9 @@ export const App = () => {
           onAboutClick={toggleAbout}
           onMyAccountClick={toggleMyAccount}
         />
-        <Suspense fallback={null}>{renderCurrentPage()}</Suspense>
+        <Suspense fallback={<div style={{ padding: 24, textAlign: 'center', opacity: 0.6 }}>Loading…</div>}>
+          {renderCurrentPage()}
+        </Suspense>
         <ConfirmDialog
           isOpen={autoLoginAccount !== null}
           variant="info"
