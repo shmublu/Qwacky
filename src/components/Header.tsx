@@ -52,6 +52,7 @@ export const Header = ({ onSettingsClick, onAddAccountClick, onChangelogClick, o
   const isSafari = process.env.BROWSER === 'safari'
   const isFirefox = !isSafari && navigator.userAgent.toLowerCase().includes('firefox')
 
+  // Support link always points at the upstream maintainer (donations route there).
   const openSupport = () => window.open('https://github.com/Lanshuns/Qwacky#support-the-project', '_blank')
   const openStore = () => window.open(
     isSafari

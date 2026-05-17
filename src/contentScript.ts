@@ -3,13 +3,22 @@ declare const browser: BrowserType;
 const api: BrowserType = typeof browser !== 'undefined' ? browser : chrome;
 
 // On Safari the address is presented as a click-to-copy banner instead of
-// being typed into the focused field. This keeps password managers like
-// Bitwarden in charge of the save-credentials flow, and the click is the
-// user gesture that Safari requires for navigator.clipboard.writeText.
+// being typed into the focused field, so password-manager save-credentials
+// flows keep working. The banner click is also the user gesture that Safari
+// requires for navigator.clipboard.writeText.
 const SAFARI = process.env.BROWSER === 'safari'
 
 const extensionAlive = () => {
   try { return !!api.runtime?.id } catch { return false }
+}
+
+const copyToClipboard = async (text: string): Promise<boolean> => {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    return false
+  }
 }
 
 const baseStyles: Partial<CSSStyleDeclaration> = {
@@ -66,12 +75,8 @@ const showCopyBanner = (fullAddress: string) => {
 
   render('Qwacky alias', fullAddress, 'Click to copy')
   banner.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(fullAddress)
-      render('Copied', fullAddress)
-    } catch {
-      render('Select and copy', fullAddress)
-    }
+    const ok = await copyToClipboard(fullAddress)
+    render(ok ? 'Copied' : 'Select and copy', fullAddress)
     setTimeout(() => banner.remove(), 1500)
   })
   document.body.appendChild(banner)
@@ -102,15 +107,6 @@ const fillInput = (element: HTMLElement | null, value: string) => {
   }
 
   return false
-}
-
-const copyToClipboard = async (text: string): Promise<boolean> => {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    return false
-  }
 }
 
 api.runtime.onMessage.addListener((message, _sender) => {

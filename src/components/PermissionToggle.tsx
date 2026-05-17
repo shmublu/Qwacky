@@ -23,10 +23,8 @@ import {
 declare const browser: typeof chrome
 const api = typeof browser !== 'undefined' ? browser : chrome
 
-const ua = navigator.userAgent.toLowerCase()
-const isFirefox = ua.includes('firefox')
-// Safari (macOS): user-agent contains "safari" but not "chrome" or "chromium".
-const isSafari = !isFirefox && ua.includes('safari') && !ua.includes('chrome') && !ua.includes('chromium')
+const isSafari = process.env.BROWSER === 'safari'
+const isFirefox = !isSafari && navigator.userAgent.toLowerCase().includes('firefox')
 
 const CHROME_PERMISSION_NOTICE_SEEN = 'chromePermissionNoticeSeen'
 
