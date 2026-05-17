@@ -3,15 +3,24 @@ import { FaGithub } from 'react-icons/fa'
 import { BackButton } from '../styles/SharedStyles'
 import { AboutContainer, AppInfo, AppLogo, AppName, AppVersion, LinksSection, LinkItem } from '../styles/pages.styles'
 
-const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+const isSafari = process.env.BROWSER === 'safari'
+const isFirefox = !isSafari && navigator.userAgent.toLowerCase().includes('firefox')
+
+const REPO_URL = isSafari
+  ? 'https://github.com/shmublu/Qwacky'
+  : 'https://github.com/Lanshuns/Qwacky'
+
+const STORE_URL = isFirefox
+  ? 'https://addons.mozilla.org/en-US/firefox/addon/qwacky/'
+  : isSafari
+    ? `${REPO_URL}/tree/safari`
+    : 'https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo'
+
+const STORE_LABEL = isFirefox ? 'Firefox Add-ons' : isSafari ? 'Safari build (GitHub)' : 'Chrome Web Store'
 
 interface AboutProps {
   onBack: () => void
 }
-
-const STORE_URL = isFirefox
-  ? 'https://addons.mozilla.org/en-US/firefox/addon/qwacky/'
-  : 'https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo'
 
 export const About = ({ onBack }: AboutProps) => {
   return (
@@ -33,14 +42,14 @@ export const About = ({ onBack }: AboutProps) => {
           Support the Project
           <MdOpenInNew size={16} />
         </LinkItem>
-        <LinkItem href="https://github.com/Lanshuns/Qwacky" target="_blank" rel="noopener noreferrer">
+        <LinkItem href={REPO_URL} target="_blank" rel="noopener noreferrer">
           <FaGithub size={20} />
           GitHub Repository
           <MdOpenInNew size={16} />
         </LinkItem>
         <LinkItem href={STORE_URL} target="_blank" rel="noopener noreferrer">
           <MdOpenInNew size={20} />
-          {isFirefox ? 'Firefox Add-ons' : 'Chrome Web Store'}
+          {STORE_LABEL}
           <MdOpenInNew size={16} />
         </LinkItem>
       </LinksSection>

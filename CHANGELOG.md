@@ -1,6 +1,19 @@
 # Changelog
 
-## 2.0.0
+## 2.0.0-safari (this fork)
+
+### Added
+- **Safari (macOS) support** - the extension now runs as a native Safari Web Extension, packaged via Xcode
+- **Click-to-copy banner on Safari** - shortcut and context-menu generation show the alias in a copy banner instead of typing it into the focused field, keeping password managers like Bitwarden in charge of the save-credentials flow
+- **Preact + lazy-loaded popup pages** - initial popup bundle dropped from ~412 kB to ~152 kB; Settings/About/Changelog/MyAccount load on demand
+
+### Fixed (Safari-specific)
+- Permission requests no longer silently denied (gesture now preserved through the dialog)
+- Content-script message handler no longer reloads the host page when the service worker idles
+
+See the [shmublu/Qwacky safari branch](https://github.com/shmublu/Qwacky/tree/safari) for full diff.
+
+## 2.0.0 (upstream)
 
 ### Added
 - **Send** - convert any email into a reverse alias to send emails privately from your @duck.com address, with history and notes

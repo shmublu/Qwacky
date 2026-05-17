@@ -3,196 +3,168 @@
 </p>
 
 <p align="center">
-<a href="#-why-qwacky">Why Qwacky?</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-download">Download</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-features">Features</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-screenshots">Screenshots</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-security--privacy">Security & Privacy</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#️-manual-installation">Manual Installation</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-development">Development</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-support-the-project">Support the Project</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="#-acknowledgments">Acknowledgments</a>
+  <a href="#what-is-this">What is this?</a> &nbsp;•&nbsp;
+  <a href="#install">Install</a> &nbsp;•&nbsp;
+  <a href="#features">Features</a> &nbsp;•&nbsp;
+  <a href="#permissions">Permissions</a> &nbsp;•&nbsp;
+  <a href="#development">Development</a> &nbsp;•&nbsp;
+  <a href="#credits">Credits</a>
 </p>
 
-# 🦆 Why Qwacky?
+# Qwacky for Safari
 
-[DuckDuckGo Email Protection](https://duckduckgo.com/email) is a great service, but using it requires installing the full DuckDuckGo extension, which comes with some limitations:
+A lightweight client for **DuckDuckGo Email Protection** — generate and manage `@duck.com` aliases without installing the full DuckDuckGo extension.
 
-- Tracking protection can only be disabled per website, not globally
-- Your default search engine gets changed to DuckDuckGo
-- No way to use email protection as a standalone feature
+This is a Safari (macOS) port of [Lanshuns/Qwacky](https://github.com/Lanshuns/Qwacky). The Chrome and Firefox builds in this fork still work and remain at upstream feature parity.
 
-Qwacky solves this by providing a lightweight, standalone alternative focused entirely on the email protection service, packed with extra features you won't find in the original extension.
+## What is this?
 
-## 📥 Download
+[DuckDuckGo Email Protection](https://duckduckgo.com/email) is a great service. Using it on Safari normally requires the full DuckDuckGo extension, which changes your default search engine and bundles tracker protection you may not want. Qwacky strips it down to just the email-alias workflow.
 
-<p align="center">
-<a href="https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo"><img src="https://user-images.githubusercontent.com/585534/107280622-91a8ea80-6a26-11eb-8d07-77c548b28665.png" alt="Get Qwacky for Chrome"></a>
-<a href="https://addons.mozilla.org/en-US/firefox/addon/qwacky/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" alt="Get Qwacky for Firefox"></a>
-</p>
+The Safari port adds:
+- A native Safari Web Extension (macOS), packaged as a small host app.
+- Bitwarden / 1Password coexistence — alias generation copies to the clipboard via a click-to-copy banner instead of typing into the focused field, so your password manager keeps owning the save-credentials flow.
+- A `safari` build target alongside the existing `chrome` / `firefox` ones.
 
-## ✨ Features
-- Generate and manage private @duck.com email addresses
-- Copy generated addresses to clipboard with one click
-- Auto-fill email fields from context menu or keyboard shortcut (`Alt+Shift+Q`)
-- Reverse alias support to convert any email into a duck.com address for sending
-- Notes and tags for each generated address with search and filtering
-- My Account page to view profile, email stats, and manage forwarding address
-- Multiple accounts support
-- Backup and restore with selective account export
-- Cross-device sync for addresses, reverse aliases, and session data
+## Install
 
-### Browser Compatibility
+### Safari (macOS) — build locally
 
-Qwacky is designed to work seamlessly on both Chrome and Firefox. The build process automatically handles browser-specific requirements:
+Safari requires extensions to be packaged in a native macOS app and code-signed. Until there's a Mac App Store listing, you build and sign it yourself with a free Apple ID — this takes ~5 minutes.
 
-- **Chrome**: Uses service workers for background scripts (Manifest V3)
-- **Firefox**: Uses background scripts with polyfill support (Manifest V3)
+1. Install **Xcode** (full app from the Mac App Store, not just Command Line Tools).
+2. After Xcode installs, run once:
+   ```bash
+   sudo xcodebuild -runFirstLaunch
+   ```
+3. Clone, install, build, generate the Xcode project:
+   ```bash
+   git clone git@github.com:shmublu/Qwacky.git
+   cd Qwacky
+   git checkout safari
+   npm install
+   npm run build:safari
+   npm run safari:convert
+   ```
+4. Open the project in Xcode:
+   ```bash
+   open safari/Qwacky/Qwacky.xcodeproj
+   ```
+5. In Xcode, set signing on **both** targets (Qwacky + Qwacky Extension):
+   - Project navigator (blue icon) → target → **Signing & Capabilities**.
+   - Check **Automatically manage signing**, pick your Personal Team. If empty, add your Apple ID via **Xcode → Settings → Accounts**.
+6. Press **⌘R** to build and run. A small "Qwacky" window will open — you can close it.
+7. Enable the extension in Safari:
+   1. Safari → Settings → Advanced → check **Show features for web developers**.
+   2. Develop → Developer Settings → check **Allow unsigned extensions**. ⚠️ Resets every time you quit Safari.
+   3. Safari → Settings → Extensions → toggle on **Qwacky**.
+   4. Click the puzzle-piece icon in Safari's toolbar → pin Qwacky.
+8. Optional — set a keyboard shortcut (see [Behavior differences on Safari](#behavior-differences-on-safari) below for the version-dependent steps). Avoid `Option+anything-letter` on Mac because Option emits Unicode characters (e.g. Option+Shift+Q types `⅝`, not a shortcut). Safe choices: `Cmd+Shift+E`, `Ctrl+Cmd+Q`, or `Cmd+Shift+9`.
 
-Both versions maintain feature parity while adhering to each browser's best practices and security models.
+### Chrome / Firefox
 
-## 📸 Screenshots
-![Qwacky Banner](assets/images/banner2.png)
-> **A big thanks to [@m.miriam12398](https://www.instagram.com/m.miriam12398/) for contributing by making such a cool designs for the project!**
+Use the upstream store listings — those builds in this fork track upstream feature parity but the canonical releases live there:
+- [Qwacky on the Chrome Web Store](https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo)
+- [Qwacky on Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/qwacky/)
 
-# 🔒 Security & Privacy
-- Uses minimal permissions required for functionality
-- All data is stored locally on your device
-- No tracking or analytics
-- Manifest V3 for better security
-- Open source for transparency
+## Features
 
-### Permissions
-- `Storage`: Required to store your generated addresses and settings locally
-- `Context Menu Autofill`: This toggle enables generating aliases from the context menu, auto-detecting email fields, It requires the following optional permissions:
-  - `contextMenus`: Enables the context menu for quick address generation
-  - `activeTab`: Required to access and inject scripts into the current tab only when you explicitly interact with the extension (e.g., using the context menu to fill email addresses)
-  - `clipboardWrite`: Needed to copy the generated address to the clipboard
-  - `scripting`: Required for programmatically injecting the content script when using the context menu
+- Generate and manage private `@duck.com` aliases.
+- Multiple DDG accounts, switch with one click.
+- Reverse aliases (turn any address into a sendable duck alias).
+- Notes and tags per alias, with search and filtering.
+- Cross-device sync of aliases, reverse aliases, and session data via the browser's built-in sync (Chrome/Firefox only — see Safari notes below).
+- Backup / restore (selective per account).
+- Keyboard shortcut and right-click context menu for quick alias generation. The generated alias is tagged with the originating site as a note, e.g. `github.com`.
 
-### Browser-Specific Permission Handling and Limitations
+### Behavior differences on Safari
 
-Firefox and Chrome differ in how they manage and display extension permissions like `contextMenus`:
+- **Click-to-copy banner** instead of input fill. On Chrome and Firefox the shortcut and context menu type the alias into the focused input. On Safari, they show a small banner in the top-right with the alias; clicking it copies to the clipboard. This is deliberate so password managers (Bitwarden, 1Password, iCloud Keychain) still own the save-credentials flow.
+- **Keyboard shortcut needs to be assigned manually.** Safari ignores `suggested_key` in the manifest. On **Safari 26+ (macOS Tahoe)** you can bind it under Safari → Settings → Extensions → Qwacky → Keyboard Shortcuts. On **Safari 17/18** there is no built-in GUI for extension shortcuts — use **System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts → +**, pick Safari, and enter the exact menu-item title `Generate and fill duck address`. Until you bind one, use the toolbar icon's **Generate** button.
+- **Host permission is time-of-use.** Safari prompts for `quack.duckduckgo.com` access the first time the extension actually calls DDG, not at install time.
+- **Cross-device sync is disabled on Safari.** Safari's `storage.sync` is local-only (it doesn't route to iCloud), so your aliases stay on the current Mac. Use Settings → Backup to roam between machines manually. A future version may add CloudKit sync via the host app.
 
-- **Firefox** requires `contextMenus` to be listed in the manifest's `permissions` block at install time. Unlike Chrome, Firefox **does not support** requesting `contextMenus` as an optional permission in Manifest V3. This is because the permission directly affects browser UI elements (like the right-click menu), and Firefox enforces that such changes be explicitly declared up front.
-- **Chrome**, on the other hand, allows `contextMenus` to be declared in `optional_permissions` and requested at runtime. However, even after removing permissions programmatically using `chrome.permissions.remove()`, they may still appear under `chrome://extensions` as "granted" - even if they're no longer active.
+## Permissions
 
-To maintain compatibility and avoid unexpected behavior:
-- We include `contextMenus` in the required permissions for Firefox.
-- We still use runtime permission requests for Chrome where possible, in line with its model.
+Required:
+- `storage` — store aliases, settings, and the access token locally.
 
-This difference in behavior is a known limitation in Chrome and has been discussed by the Chromium team:
-- [Chromium Extensions Group – Optional Permission Removal Behavior](https://groups.google.com/a/chromium.org/g/chromium-extensions/c/tqbVLwgVh58)
-- [Chrome Developers Documentation – Optional Permissions](https://developer.chrome.com/docs/extensions/mv3/declare_permissions/#optional-permissions)
-- [Mozilla Discourse – `contextMenus` as an optional permission is not supported in Firefox](https://discourse.mozilla.org/t/contextmenus-as-an-optional-permission/64181)
+Optional (granted only when you enable the Autofill toggle in Settings):
+- `contextMenus`, `activeTab`, `scripting` — for the right-click and keyboard-shortcut generators.
+- `clipboardWrite` — for copy-to-clipboard.
 
-# 🛠️ Manual Installation
+Host permission:
+- `https://quack.duckduckgo.com/*` — the DDG API endpoint. Granted at install time on Chrome/Firefox, time-of-use on Safari.
 
-#### Chrome
-1. Download the latest release from the [GitHub Releases](https://github.com/Lanshuns/Qwacky/releases) page
-2. Unzip the downloaded file
-3. Open Chrome and go to `chrome://extensions/`
-4. Enable "Developer mode" in the top right
-5. Click "Load unpacked" and select the unzipped folder
+All data stays on your device. No telemetry, no analytics.
 
-#### Firefox
-1. Download the Firefox version (.xpi file) from the [GitHub Releases](https://github.com/Lanshuns/Qwacky/releases) page
-2. Open Firefox and go to `about:addons`
-3. Click the gear icon and select "Install Add-on From File..."
-4. Select the downloaded .xpi file
+## Development
 
-# 💻 Development
+Requires Node 18+ and npm 9+. macOS for the Safari target.
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm (v7 or higher)
-
-### Setup
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Lanshuns/Qwacky.git
-cd qwacky
-# 2. Install dependencies
+git clone git@github.com:shmublu/Qwacky.git
+cd Qwacky
+git checkout safari
 npm install
 ```
 
-### Development Mode
+Build any target:
 
 ```bash
-# For Chrome
-npm run dev
-# For Firefox
-npm run dev:firefox
+npm run build           # Chrome  -> dist_chrome/
+npm run build:firefox   # Firefox -> dist_firefox/
+npm run build:safari    # Safari  -> dist_safari/
 ```
 
-### Production Build
+Watch mode (rebuilds on save):
 
 ```bash
-# For Chrome
-npm run build
-# For Firefox
-npm run build:firefox
-# For Safari (macOS)
-npm run build:safari
+npm run dev             # Chrome
+npm run dev:firefox     # Firefox
+npm run dev:safari      # Safari
 ```
 
-The built extension will be available in `dist_chrome/`, `dist_firefox/`, or `dist_safari/` respectively.
+Safari-specific scripts:
 
-> **Note**: For development and temporary installation in Firefox, you can use `about:debugging` method:
-> 1. Go to `about:debugging`
-> 2. Click "This Firefox" in the left sidebar
-> 3. Click "Load Temporary Add-on"
-> 4. Select the `manifest.json` file from the `dist_firefox/` folder
-
-### Safari (macOS)
-
-Safari extensions must be wrapped in a native macOS app and signed by Xcode.
-The `safari/` directory contains a generated Xcode project that does both.
-
-**Prerequisites**
-- Xcode (full app, not just Command Line Tools)
-- Run `sudo xcodebuild -runFirstLaunch` once after installing Xcode
-
-**Build and run**
 ```bash
-# 1. Build the web extension assets
-npm run build:safari
-
-# 2. Regenerate the Xcode wrapper from the latest assets
-#    (only needed when manifest or resource layout changes — the dev loop
-#    in step 3 picks up JS/CSS changes automatically via the symlinked
-#    Resources folder if you re-run `build:safari`)
-npm run safari:convert
-
-# 3. Build and run the host app
-open safari/Qwacky/Qwacky.xcodeproj
-# In Xcode: select the "Qwacky" scheme, then Product > Run.
+npm run safari:convert  # Regenerate the Xcode wrapper (only when manifest/layout changes)
+npm run safari:sync     # rsync dist_safari/ into the Xcode project's Resources/ folder
+npm run safari          # build:safari + safari:sync (typical dev loop)
 ```
 
-**Enable the extension in Safari**
-1. Safari → Settings → Advanced → check "Show features for web developers"
-2. Develop → Developer Settings → check "Allow unsigned extensions"
-   (This resets each time Safari quits.)
-3. Safari → Settings → Extensions → enable Qwacky.
+Typical Safari iteration loop:
+1. Edit a file under `src/`.
+2. `npm run safari` — rebuilds JS and copies it into the Xcode project.
+3. In Xcode, **Product → Clean Build Folder** (⌘⇧K) then **⌘R**.
+4. Quit and reopen Safari (it caches extension code).
 
-The extension's host permission (`quack.duckduckgo.com`) is granted
-time-of-use on Safari — you'll see a one-tap prompt the first time the
-extension calls DuckDuckGo's API.
+### Project layout
 
-# 💖 Support the Project
+```
+src/                            Web-extension source (TS + Preact via react alias)
+  background.ts                 Service worker
+  contentScript.ts              Page-side fill/copy banner
+  bypassExtensionRequirement.ts MAIN-world fetch sniffer for auto-login
+  ddgEmailAuth.ts               ISOLATED-world bridge for the sniffer
+  pages/                        Popup pages (Login, OTP, Dashboard, Settings, ...)
+  services/                     DDG API, storage, sync, import/export
+  context/                      React contexts (app state, permissions)
+manifest.chrome.json
+manifest.firefox.json
+manifest.safari.json
+vite.config.ts                  Builds 3 targets with the same source
+safari/                         Generated Xcode project (host app + extension)
+```
 
-There are a few ways you can support Qwacky's development:
+## Credits
 
-- **Star the repository** on GitHub it helps others discover the project
-- **Leave a review** on the [Chrome Web Store](https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo/reviews) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/qwacky/reviews/) it makes a big difference!
-- **Donate via cryptocurrency:**
+This fork is built on top of [Lanshuns/Qwacky](https://github.com/Lanshuns/Qwacky) — the entire popup UI, alias workflow, sync, and DDG API integration are upstream. The Safari port adds packaging, build-target plumbing, Preact swap for popup cold-start, and a handful of Safari-specific reliability fixes.
 
-| Currency | Address |
-|----------|---------|
-| **Bitcoin (BTC)** | `bc1qmmwwsn4cvpsx39sf53qsqcjyjzsqp90lus365w` |
-| **Ethereum (ETH)** | `0x08658772EeC32e72456048Be5D5a52bd3bcb01bc` |
-| **Litecoin (LTC)** | `LKYDeJWeo3kMG1TbY4cqSi87wFeR6YUXP2` |
-| **USDT (TRON/TRX)** | `TAhdRW3nJxinWjrdYfSWB31RdjRkQKvkEq` |
-| **USDT (BEP-20)** | `0x08658772EeC32e72456048Be5D5a52bd3bcb01bc` |
+Issues with the **Safari port** specifically: [shmublu/Qwacky/issues](https://github.com/shmublu/Qwacky/issues).
+Issues with the **upstream** Chrome/Firefox app: [Lanshuns/Qwacky/issues](https://github.com/Lanshuns/Qwacky/issues).
 
-> If you'd like to be recognized for your donation, feel free to [open an issue](https://github.com/Lanshuns/Qwacky/issues/new) with your name and transaction ID, and I'll add you to the supporters list!
+Donations to the **upstream** maintainer (who built the app): see the [Lanshuns/Qwacky README](https://github.com/Lanshuns/Qwacky#-support-the-project).
 
-# 🙏 Acknowledgments
-
-This project is a derivative work based on DuckDuckGo's Email Protection service, which is licensed under the Apache License 2.0. The original work's copyright notice:
-
-Copyright (c) 2010-2021 Duck Duck Go, Inc.
-
-For the full license text, see [APACHE-LICENSE](https://github.com/duckduckgo/duckduckgo-privacy-extension/blob/main/LICENSE.md).
+This project is a derivative work based on DuckDuckGo's Email Protection service, licensed under the Apache License 2.0.
+Copyright (c) 2010-2021 Duck Duck Go, Inc. — see [APACHE-LICENSE](https://github.com/duckduckgo/duckduckgo-privacy-extension/blob/main/LICENSE.md).

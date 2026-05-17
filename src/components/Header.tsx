@@ -49,8 +49,18 @@ export const Header = ({ onSettingsClick, onAddAccountClick, onChangelogClick, o
 
   const isPopout = window.location.search.includes('popout=1')
 
+  const isSafari = process.env.BROWSER === 'safari'
+  const isFirefox = !isSafari && navigator.userAgent.toLowerCase().includes('firefox')
+
   const openSupport = () => window.open('https://github.com/Lanshuns/Qwacky#support-the-project', '_blank')
-  const openStore = () => window.open('https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo', '_blank')
+  const openStore = () => window.open(
+    isSafari
+      ? 'https://github.com/shmublu/Qwacky/tree/safari'
+      : isFirefox
+        ? 'https://addons.mozilla.org/en-US/firefox/addon/qwacky/'
+        : 'https://chromewebstore.google.com/detail/qwacky/kieehbhdbincplacegpjdkoglfakboeo',
+    '_blank'
+  )
 
   const handlePopout = () => {
     chrome.runtime.sendMessage({ action: 'popoutExtension' })
