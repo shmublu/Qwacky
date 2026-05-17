@@ -2,11 +2,11 @@ type BrowserType = typeof chrome;
 declare const browser: BrowserType;
 const api: BrowserType = typeof browser !== 'undefined' ? browser : chrome;
 
-// On Safari the address is presented as a click-to-copy banner instead of
-// being typed into the focused field, so password-manager save-credentials
-// flows keep working. The banner click is also the user gesture that Safari
-// requires for navigator.clipboard.writeText.
-const SAFARI = process.env.BROWSER === 'safari'
+// Shortcut/context-menu generation fills the focused input AND shows a
+// click-to-copy banner. The banner doubles as visible feedback ("here's the
+// alias") and as a clipboard fallback — on Safari the auto-clipboard call
+// is async-post-gesture and can fail silently, but the banner click is a
+// fresh gesture and always works.
 
 const extensionAlive = () => {
   try { return !!api.runtime?.id } catch { return false }
@@ -46,7 +46,7 @@ const showNotification = (message: string) => {
   setTimeout(() => notification.remove(), 3000)
 }
 
-const showCopyBanner = (fullAddress: string) => {
+const showCopyBanner = (fullAddress: string, filled = false) => {
   const banner = document.createElement('div')
   Object.assign(banner.style, baseStyles, { cursor: 'pointer' })
   banner.setAttribute('role', 'status')
@@ -73,14 +73,14 @@ const showCopyBanner = (fullAddress: string) => {
     }
   }
 
-  render('Qwacky alias', fullAddress, 'Click to copy')
+  render(filled ? 'Qwacky alias (filled)' : 'Qwacky alias', fullAddress, 'Click to copy')
   banner.addEventListener('click', async () => {
     const ok = await copyToClipboard(fullAddress)
     render(ok ? 'Copied' : 'Select and copy', fullAddress)
     setTimeout(() => banner.remove(), 1500)
   })
   document.body.appendChild(banner)
-  setTimeout(() => banner.remove(), 10000)
+  setTimeout(() => banner.remove(), 5000)
 }
 
 const fillInput = (element: HTMLElement | null, value: string) => {
@@ -115,25 +115,17 @@ api.runtime.onMessage.addListener((message, _sender) => {
   if (message.type === 'fill-address') {
     const fullAddress = `${message.address}@duck.com`
 
-    if (SAFARI) {
-      showCopyBanner(fullAddress)
-      return false
-    }
-
     void (async () => {
       const activeElement = document.activeElement as HTMLElement | null
       const filled = fillInput(activeElement, message.address)
-      const copied = await copyToClipboard(fullAddress)
-
-      if (!filled) {
-        showNotification(copied
-          ? 'Could not fill input, address copied to clipboard'
-          : 'Could not fill input or copy to clipboard. Please check permissions in settings.')
-      } else {
-        showNotification(copied
-          ? 'Address filled and copied to clipboard'
-          : 'Address filled but could not copy to clipboard. Please check permissions in settings.')
-      }
+      // Best-effort clipboard write. On Safari this is async-post-gesture and
+      // can fail silently; the banner click below is a fresh gesture that
+      // will succeed if this one didn't.
+      await copyToClipboard(fullAddress)
+      // Always show the banner so the user sees what was generated, can
+      // click-to-copy if the auto-copy didn't take, and gets feedback even
+      // when no input was focused.
+      showCopyBanner(fullAddress, filled)
     })()
     return false
   }
