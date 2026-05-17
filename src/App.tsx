@@ -36,25 +36,21 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
 
-  html, body {
-    margin: 0;
-    padding: 0;
+  html {
+    height: 100%;
+    overflow: hidden;
   }
 
   body {
+    height: 100%;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background: ${props => props.theme.background};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Let the Container element be the sole scroll surface — eliminates the
-     html-vs-body double-scroll fight that made the popup stutter. */
-  #root {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
   }
 
   ::selection {
@@ -85,17 +81,12 @@ const GlobalStyle = createGlobalStyle`
 const Container = styled.div`
   width: 400px;
   max-width: 100%;
-  flex: 1 1 auto;
+  min-height: 480px;
   color: ${props => props.theme.text};
   position: relative;
   margin: auto;
   background: ${props => props.theme.background};
   overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  /* Promote to its own compositing layer so scroll repaints don't drag
-     the whole popup with them. */
-  will-change: transform;
 `
 
 export const App = () => {
