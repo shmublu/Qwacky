@@ -36,6 +36,11 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
 
+  html, body {
+    height: auto;
+    overflow-y: auto;
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
