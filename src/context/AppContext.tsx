@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { DuckService } from '../services/DuckService'
 import { SyncService } from '../services/SyncService'
+import { restoreSafariSessionIfNeeded } from '../safariSessionPersistence'
 import { UserData } from '../types'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 
@@ -72,7 +73,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     const loadAccounts = async () => {
-      const result = await chrome.storage.local.get(['accounts', 'currentAccount'])
+      let result = await chrome.storage.local.get(['accounts', 'currentAccount'])
+      // On Safari, storage.local may have been evicted (logging the user out).
+      // Rehydrate from the iCloud-backed session mirror before deciding there
+      // is no session, so the popup opens straight to the dashboard again.
+      if ((!Array.isArray(result.accounts) || result.accounts.length === 0) && !result.currentAccount) {
+        const restored = await restoreSafariSessionIfNeeded()
+        if (restored) {
+          result = await chrome.storage.local.get(['accounts', 'currentAccount'])
+        }
+      }
       if (Array.isArray(result.accounts)) {
         setAccounts(result.accounts)
       }

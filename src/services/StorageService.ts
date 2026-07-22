@@ -34,18 +34,25 @@ export class StorageService {
     return userData?.user?.username || null;
   }
 
-  async saveGeneratedAddress(address: string, notes?: string): Promise<void> {
+  async saveGeneratedAddress(address: string, notes?: string, tags?: string[]): Promise<void> {
     try {
       const username = await this.getCurrentUsername();
       if (!username) {
         throw new Error('User data not found');
       }
 
+      // Normalize + dedupe tags supplied at creation (e.g. the page domain when
+      // generated on a site), matching the UI's trim().toLowerCase() rule.
+      const cleanTags = Array.from(new Set(
+        (tags || []).map(t => t.trim().toLowerCase()).filter(Boolean)
+      ));
+
       const newAddress = {
         value: address,
         timestamp: Date.now(),
         lastModified: Date.now(),
         notes: notes || '',
+        ...(cleanTags.length ? { tags: cleanTags } : {}),
         username: username
       };
 

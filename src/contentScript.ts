@@ -46,7 +46,7 @@ const showNotification = (message: string) => {
   setTimeout(() => notification.remove(), 3000)
 }
 
-const showCopyBanner = (fullAddress: string, filled = false) => {
+const showCopyBanner = (fullAddress: string, filled = false, tag?: string) => {
   const banner = document.createElement('div')
   Object.assign(banner.style, baseStyles, { cursor: 'pointer' })
   banner.setAttribute('role', 'status')
@@ -63,6 +63,14 @@ const showCopyBanner = (fullAddress: string, filled = false) => {
     valueEl.style.userSelect = 'all'
     valueEl.textContent = value
     banner.append(labelEl, valueEl)
+    if (tag) {
+      const tagEl = document.createElement('div')
+      tagEl.style.fontSize = '12px'
+      tagEl.style.marginTop = '4px'
+      tagEl.style.opacity = '0.85'
+      tagEl.textContent = `Tagged: ${tag}`
+      banner.append(tagEl)
+    }
     if (hint) {
       const hintEl = document.createElement('div')
       hintEl.style.fontSize = '12px'
@@ -124,8 +132,8 @@ api.runtime.onMessage.addListener((message, _sender) => {
       await copyToClipboard(fullAddress)
       // Always show the banner so the user sees what was generated, can
       // click-to-copy if the auto-copy didn't take, and gets feedback even
-      // when no input was focused.
-      showCopyBanner(fullAddress, filled)
+      // when no input was focused. Includes the auto-applied site tag.
+      showCopyBanner(fullAddress, filled, typeof message.tag === 'string' ? message.tag : undefined)
     })()
     return false
   }

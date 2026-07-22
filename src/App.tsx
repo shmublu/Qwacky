@@ -36,16 +36,18 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
 
-  html {
-    height: 100%;
-    overflow: hidden;
+  html, body {
+    margin: 0;
+    padding: 0;
   }
 
+  /* The scroll deliberately does NOT live on html/body. In a Safari Web
+     Extension popup the document scroll position is reset every time Safari
+     re-lays-out the popup (which it does as async data loads and on repaint) —
+     that is what made the popup "scroll back up". The popup is a fixed-size
+     shell (Container) and the scroll lives on an inner element (ScrollArea). */
   body {
-    height: 100%;
-    margin: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    width: 400px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background: ${props => props.theme.background};
@@ -78,15 +80,43 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+// Fixed-size popup shell. A stable, definite height (a) stops Safari from
+// continuously re-sizing the popup — the trigger for the scroll-position reset —
+// and (b) gives the inner ScrollArea a height to bound its scroll. We use a
+// plain fixed px height (NOT vh): 100vh in a Safari popup can resolve to ~0
+// during initial layout and collapse the whole popup. 600px sits within
+// Safari's popup height cap on normal displays.
 const Container = styled.div`
   width: 400px;
   max-width: 100%;
-  min-height: 480px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
   color: ${props => props.theme.text};
   position: relative;
-  margin: auto;
   background: ${props => props.theme.background};
+  overflow: hidden;
+`
+
+// The header stays pinned; it must not scroll or shrink.
+const HeaderSlot = styled.div`
+  flex: 0 0 auto;
+`
+
+// The single scroll surface for the popup. min-height: 0 is required for a flex
+// child to actually scroll instead of growing the parent. overscroll-behavior:
+// contain stops rubber-banding from leaking to Safari's chrome. NOTE: we do NOT
+// put transform/will-change here — an overflow:auto element already gets its own
+// composited scrolling layer in WebKit, and a transform would make this the
+// containing block for every position:fixed modal rendered inside it (clipping
+// the confirm dialogs / pickers). The fix for jank is owning the scroll on this
+// bounded element instead of the document, not a compositing hint.
+const ScrollArea = styled.div`
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
 `
 
 export const App = () => {
@@ -319,16 +349,20 @@ export const App = () => {
     <ThemeProvider theme={darkMode ? theme.dark : theme.light}>
       <GlobalStyle />
       <Container>
-        <Header
-          onSettingsClick={toggleSettings}
-          onAddAccountClick={handleAddAccount}
-          onChangelogClick={toggleChangelog}
-          onAboutClick={toggleAbout}
-          onMyAccountClick={toggleMyAccount}
-        />
-        <Suspense fallback={<div style={{ padding: 24, textAlign: 'center', opacity: 0.6 }}>Loading…</div>}>
-          {renderCurrentPage()}
-        </Suspense>
+        <HeaderSlot>
+          <Header
+            onSettingsClick={toggleSettings}
+            onAddAccountClick={handleAddAccount}
+            onChangelogClick={toggleChangelog}
+            onAboutClick={toggleAbout}
+            onMyAccountClick={toggleMyAccount}
+          />
+        </HeaderSlot>
+        <ScrollArea>
+          <Suspense fallback={<div style={{ padding: 24, textAlign: 'center', opacity: 0.6 }}>Loading…</div>}>
+            {renderCurrentPage()}
+          </Suspense>
+        </ScrollArea>
         <ConfirmDialog
           isOpen={autoLoginAccount !== null}
           variant="info"

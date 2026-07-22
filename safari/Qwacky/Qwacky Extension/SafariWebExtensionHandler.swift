@@ -158,6 +158,17 @@ private final class ICloudFileBackend: SyncBackend {
               url.startAccessingSecurityScopedResource() else {
             return nil
         }
+        // If the bookmark went stale (folder moved/renamed, or macOS reissued
+        // it), regenerate and persist it now — otherwise it keeps resolving
+        // stale until startAccessingSecurityScopedResource() eventually fails
+        // and sync silently falls back to local-only forever.
+        if isStale {
+            if let fresh = try? url.bookmarkData(options: .withSecurityScope,
+                                                 includingResourceValuesForKeys: nil,
+                                                 relativeTo: nil) {
+                defaults.set(fresh, forKey: bookmarkKey)
+            }
+        }
         return ICloudFileBackend(folder: url)
     }
 

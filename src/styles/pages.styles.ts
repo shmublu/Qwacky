@@ -739,8 +739,8 @@ export const ChangelogContent = styled.div`
   color: ${props => props.theme.text};
   font-size: 14px;
   line-height: 1.6;
-  max-height: 400px;
-  overflow-y: auto;
+  /* No inner scroll: the popup's single ScrollArea (App.tsx) owns scrolling.
+     A nested overflow:auto here would fight the page scroll on Safari. */
 
   h1 {
     font-size: 20px;

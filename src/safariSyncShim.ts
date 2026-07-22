@@ -14,19 +14,25 @@
 //      a bad state), an await on chrome.storage.sync.* would otherwise hang
 //      forever — which would freeze the popup mid-click on operations like
 //      deleteAddress that fall through to a sync write.
-//   2. If a call times out, we flip a process-local switch and short-circuit
-//      every subsequent call. That keeps the popup responsive even when sync
-//      is fully unreachable.
+//   2. If a call fails, we back off for a short cooldown and short-circuit
+//      subsequent calls during it, then automatically retry. We deliberately
+//      do NOT latch "unavailable" for the whole session: the old permanent
+//      latch meant a single slow iCloud round-trip disabled sync for the rest
+//      of the session, so a freshly generated address silently never synced.
 
 declare const browser: typeof chrome
 
 const QUOTA_BYTES = 1_048_576 // 1 MB, matches NSUbiquitousKeyValueStore
-const TIMEOUT_MS = 250
+// iCloud-backed native round-trips (file read/write + security-scoped bookmark
+// resolution) routinely take longer than the old 250ms budget on a cold worker.
+const TIMEOUT_MS = 2_000
+// After a failure, stop hammering the host for this long, then retry once more.
+const COOLDOWN_MS = 15_000
 
-let nativeUnavailable = false
+let unavailableUntil = 0
 
 const send = async (msg: Record<string, unknown>): Promise<any> => {
-  if (nativeUnavailable) throw new Error('native messaging unavailable')
+  if (Date.now() < unavailableUntil) throw new Error('native messaging cooling down')
 
   const api = (typeof browser !== 'undefined' ? browser : chrome)
   let timer: ReturnType<typeof setTimeout> | null = null
@@ -35,9 +41,12 @@ const send = async (msg: Record<string, unknown>): Promise<any> => {
   })
 
   try {
-    return await Promise.race([api.runtime.sendNativeMessage('com.shmublu.Qwacky', msg), timeout])
+    const result = await Promise.race([api.runtime.sendNativeMessage('com.shmublu.Qwacky', msg), timeout])
+    unavailableUntil = 0 // a success clears any lingering cooldown
+    return result
   } catch (err) {
-    nativeUnavailable = true
+    // Temporary backoff only — the next call after COOLDOWN_MS retries.
+    unavailableUntil = Date.now() + COOLDOWN_MS
     throw err
   } finally {
     if (timer) clearTimeout(timer)

@@ -91,6 +91,10 @@ export const Dashboard = () => {
   }, [activeTab]);
 
   useEffect(() => {
+    // Guard against a stale in-flight load overwriting newer data: userData and
+    // currentAccount can update in two quick ticks (firing this effect twice),
+    // and switching accounts mid-load could otherwise let the slower response win.
+    let cancelled = false;
     if (userData) {
       const loadData = async () => {
         try {
@@ -98,9 +102,11 @@ export const Dashboard = () => {
             duckService.getAddresses(),
             duckService.getReverseAliases()
           ]);
+          if (cancelled) return;
           setAddresses(loadedAddresses);
           setReverseAliases(loadedAliases);
         } catch (error) {
+          if (cancelled) return;
           console.error('Error loading data:', error);
           showNotification("Failed to load data");
           setAddresses([]);
@@ -113,6 +119,7 @@ export const Dashboard = () => {
       setAddresses([]);
       setReverseAliases([]);
     }
+    return () => { cancelled = true; };
   }, [userData, currentAccount]);
 
   const copyToClipboard = useCallback(async (text: string, event?: MouseEvent) => {
@@ -206,9 +213,17 @@ export const Dashboard = () => {
     );
   }, [addresses, pickerSearch]);
 
+  // A recipient email is valid to convert only if it has both "@" and ".".
+  // Used for BOTH the button's disabled state and the handler guard so the
+  // button is never enabled for input the handler will silently reject.
+  const isValidRecipient = (value: string) => {
+    const email = value.trim();
+    return !!email && email.includes("@") && email.includes(".");
+  };
+
   const handleConvertReverseAlias = async (event?: React.MouseEvent | React.KeyboardEvent) => {
     const email = recipientEmail.trim();
-    if (!email || !email.includes("@") || !email.includes(".")) return;
+    if (!isValidRecipient(email)) return;
     if (!userData) return;
     const senderLocal = effectiveSender || userData.user.username;
     const alias = email.replace("@", "_at_") + "_" + senderLocal + "@duck.com";
@@ -375,7 +390,7 @@ export const Dashboard = () => {
               />
               <ReverseAliasConvertButton
                 onClick={handleConvertReverseAlias}
-                disabled={!recipientEmail.trim().includes("@")}
+                disabled={!isValidRecipient(recipientEmail)}
               >
                 Convert
               </ReverseAliasConvertButton>

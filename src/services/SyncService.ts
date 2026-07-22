@@ -440,6 +440,12 @@ export class SyncService {
       lastModified: addr.lastModified || Date.now()
     }));
 
+    // Update the session cache IMMEDIATELY (only the remote chrome.storage.sync
+    // write below is debounced). Otherwise a read within the 2s debounce window
+    // returns the pre-write cache and the just-saved address/tag is overwritten
+    // back to the old value when getAddresses persists the stale cache to local.
+    await this.saveToSessionCache(accountKey, addressesWithTimestamp);
+
     const pending = this.pendingWrites.get(accountKey);
     if (pending) {
       clearTimeout(pending.timer);

@@ -1,6 +1,11 @@
 import { installSafariSyncShim } from './safariSyncShim'
 installSafariSyncShim()
 
+import { restoreSafariSessionIfNeeded, installSafariSessionMirror } from './safariSessionPersistence'
+// Mirror the session to the iCloud-backed sync store on every change so a
+// Safari storage.local eviction can't silently log the user out.
+installSafariSessionMirror()
+
 type BrowserType = typeof chrome;
 
 interface FirefoxBrowserType extends BrowserType {
@@ -35,6 +40,11 @@ const safeHostname = (host: string): string => {
   const cleaned = host.replace(/[^\x20-\x7E]/g, '')
   return cleaned.slice(0, 100)
 }
+
+// Turn a page hostname into a tag for the generated alias: drop a leading
+// "www.", lowercase, trim. e.g. "www.GitHub.com" -> "github.com".
+const domainTag = (host: string): string =>
+  safeHostname(host).toLowerCase().replace(/^www\./, '').trim()
 
 const FeatureState = {
   async get(): Promise<boolean> {
@@ -177,6 +187,11 @@ const Feature = {
 
 const initialize = async () => {
   try {
+    // Before anything else on a fresh worker wake, rehydrate the session from
+    // the iCloud-backed sync store if Safari evicted storage.local. Restores
+    // login so context-menu/keyboard generation keeps working post-eviction.
+    await restoreSafariSessionIfNeeded()
+
     const [hasState, hasPermissions] = await Promise.all([
       api.storage.local.get(FEATURE_STATE_KEY),
       Permissions.check()
@@ -201,11 +216,16 @@ const initialize = async () => {
   }
 }
 
-api.runtime.onInstalled.addListener(() => {
-  setTimeout(initialize, 1000)
-})
-
-setTimeout(initialize, 1000)
+// Re-run initialize whenever the (non-persistent on Safari) service worker
+// wakes — on install, on browser startup, and immediately on first load.
+// The 1s setTimeout was unreliable: Safari can suspend the worker before the
+// timer fires, leaving the context menu missing. ContextMenu.create() is
+// idempotent, so calling it eagerly on every wake is safe.
+api.runtime.onInstalled.addListener(() => { initialize() })
+if (api.runtime.onStartup) {
+  api.runtime.onStartup.addListener(() => { initialize() })
+}
+initialize()
 
 api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!message || typeof message !== 'object' || typeof message.action !== 'string') {
@@ -423,14 +443,15 @@ if (api.contextMenus) {
     if (info.menuItemId !== CONTEXT_MENU_ID || !tab?.id || tab.id < 0) return
 
     try {
-      let domain = ''
+      let tag = ''
       if (tab.url) {
         try {
-          domain = safeHostname(new URL(tab.url).hostname)
+          tag = domainTag(new URL(tab.url).hostname)
         } catch {}
       }
 
-      const response = await duckService.generateAddress(domain || undefined)
+      // Default-tag the alias with the site it was generated on.
+      const response = await duckService.generateAddress(undefined, tag ? [tag] : undefined)
       if (response.status === 'error') {
         try {
           await api.tabs.sendMessage(tab.id, {
@@ -450,7 +471,8 @@ if (api.contextMenus) {
       try {
         await api.tabs.sendMessage(tab.id, {
           type: 'fill-address',
-          address: response.address
+          address: response.address,
+          tag
         });
       } catch {
       }
@@ -468,14 +490,15 @@ if (api.commands) {
       const [activeTab] = await api.tabs.query({ active: true, currentWindow: true })
       if (!activeTab?.id || activeTab.id < 0) return
 
-      let domain = ''
+      let tag = ''
       if (activeTab.url) {
         try {
-          domain = safeHostname(new URL(activeTab.url).hostname)
+          tag = domainTag(new URL(activeTab.url).hostname)
         } catch {}
       }
 
-      const response = await duckService.generateAddress(domain || undefined)
+      // Default-tag the alias with the site it was generated on.
+      const response = await duckService.generateAddress(undefined, tag ? [tag] : undefined)
       if (response.status === 'error') {
         try {
           await api.tabs.sendMessage(activeTab.id, {
@@ -495,7 +518,8 @@ if (api.commands) {
       try {
         await api.tabs.sendMessage(activeTab.id, {
           type: 'fill-address',
-          address: response.address
+          address: response.address,
+          tag
         });
       } catch {
       }

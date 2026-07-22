@@ -60,7 +60,7 @@ export class DuckService {
     }
   }
 
-  async generateAddress(notes?: string): Promise<GenerateResponse> {
+  async generateAddress(notes?: string, tags?: string[]): Promise<GenerateResponse> {
     try {
       const userData = await this.storage.getUserData()
       if (!userData) {
@@ -77,7 +77,7 @@ export class DuckService {
           return { status: 'error', message: 'No address returned from the server' }
         }
         
-        await this.storage.saveGeneratedAddress(response.address, notes)
+        await this.storage.saveGeneratedAddress(response.address, notes, tags)
 
         const latestUserData = await this.storage.getUserData()
         if (latestUserData) {
